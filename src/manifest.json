@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
+  "icon": "icon.png",
+  "commands": [
+    {
+      "script" : "exportStyles.js",
+      "name" : "Check Textlayer",
+      "handlers" : {
+        "run" : "exportTextLayer"
+      },
+      "identifier" : "exportTextstyles"
+    },
+    {
+      "script" : "exportStyles.js",
+      "name" : "Check Styles & Variables",
+      "handlers" : {
+        "run" : "exportLayerStyles"
+      },
+      "identifier" : "exportSketchLayerStyles"
+    },
+    {
+      "name": "Message",
+      "identifier": "element.show",
+      "script": "exportStyles.js",
+      "handlers": {
+        "actions": {
+          "HandleURL": "setSelection"
+        }
+      }
+    }
+  ],
+  "menu": {
+    "title": "Designsystem-Tools",
+    "items": [
+      "exportTextstyles",
+      "exportSketchLayerStyles"
+    ]
+  }
+}
+
+
