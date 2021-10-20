@@ -5,13 +5,13 @@
 
 
 var FILETYPE = 'html';
-let LINKINPUT = "sketch://plugin/com.atomatic.plugins.style2csv/"
+let LINKINPUT = "sketch://plugin/com.atomatic.designsystem-tools/"
 let LAYERSHOWFUNCTION = "element.show"
 
 
 
 
-let htmlheader = '<!doctype html><html class="no-js" lang=""><head><meta charset="utf-8"><title></title><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color"><style>body{display: flex; justify-content:center; font-family: helvetica; font-size: 14px; color: #282D37;} h1 {font-size:40px; margin: 120px 0 17px 0; }h1::after{content: "";width: 56px; height: 6px;background: #ec0016; display: block; margin: 12px 0; border-radius: 3px; overflow: hidden;} .subline{ padding-bottom: 120px; font-size: 24px; font-weight: 100;} .smallText{font-size:10px} .block{display:block;} .table-wrapper{min-width:1088px; max-width: 1288px; margin:0 64px; } table{border-spacing:0; width: 100%;} th, td {padding: 10px 20px; text-align: left; border-bottom: 1px solid #D7DCE1; min-width:50px;} tr:hover{background: #E0EFFB} .ffamily {width: 110px;} .warning{background:#F75F00; color:#fff} .error{background:#EC0016; color:#fff}</style></head><body>';
+let htmlheader = '<!doctype html><html class="no-js" lang=""><head><meta charset="utf-8"><title></title><meta name="description" content=""><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color"><style>body{display: flex; justify-content:center; font-family: helvetica; font-size: 14px; color: #282D37;} h1 {font-size:40px; margin: 120px 0 17px 0; }h1::after{content: "";width: 56px; height: 6px;background: #ec0016; display: block; margin: 12px 0; border-radius: 3px; overflow: hidden;} .subline{ padding-bottom: 120px; font-size: 24px; font-weight: 100;} .smallText{font-size:10px} .block{display:block;} .table-wrapper{min-width:1088px; max-width: 1288px; margin:0 64px; } table{border-spacing:0; width: 100%;} th, td {padding: 10px 20px; text-align: left; border-bottom: 1px solid #D7DCE1; min-width:50px;} tr:hover{background: #E0EFFB} .ffamily {width: 110px;} .colorWidth{width:150px} .warning{background:#F75F00; color:#fff} .error{background:#EC0016; color:#fff}</style></head><body>';
 let htmlEnd = '</body></html>'
 
 function saveToFile({ filenamePrefix, content: string }) {
@@ -62,7 +62,7 @@ function getSystemFonts() {
 
 
 
-
+import * as GF from './global-functions.js'
 
 
 
@@ -73,24 +73,8 @@ var document = sketch.getSelectedDocument()
 var sharedStyle = require('sketch/dom').SharedStyle
 var UI = require('sketch/ui')
 
+var documentSwatches = document.swatches;
 
-
-
-function unselectAllLayer(){
-  let selectedLayersObject = document.selectedLayers
-  let selectedLayersArray = selectedLayersObject.layers
-
-  selectedLayersArray.forEach(function(layer){
-    layer.selected = false;
-  })
-}
-
-
-
-function centerToLayer(obj){
-  //document.centerOnLayer(obj)
-  MSDocument.currentDocument().eventHandlerManager().currentHandler().zoomToSelection()
-}
 
 function createLink(cmd, uri){
   // encodeURIComponent(URI)
@@ -103,48 +87,102 @@ function createNiceHTMLLink( niceName,link){
 }
 
 
+function createNiceHTMLName(name){
+    var lastName = name.split("/")
+      lastName = lastName[lastName.length -1];
+      return "<td><span class='block'>"+lastName+"</span><span class='block smallText'>"+name+"</span></td>";
+}
 
-function focusOnLayer (id){
-  var layer = document.getLayerWithID(id)
-  if (layer){
-    unselectAllLayer();
-    layer.getParentPage().selected = true;
-    layer.selected = true;
-    centerToLayer(layer)
-  }
+
+function niceColorHexAlpha(color){
+  return "<td>Hex: "+color.hex+" Alpha: "+color.a+"</td>";
 }
 
 
 
-/*
 
-var setSelection = function (context) {
-  let query = context.actionContext.query
-  id = query.msg
-  log(id)
-  focusOnLayer("E4381EEA-F904-4DB0-921C-9A37AE4647A2")
-}
-*/
+export var checkSwatches = function (context) {
 
-var setSelection = function (context) {
-  let query = context.actionContext.query
-  var theID = query.msg
-  focusOnLayer (theID)
+  var docName = context.document.fileURL().lastPathComponent().split(".sketch")[0];
+
+  let wrapperDivStart = "<div class='table-wrapper'>"
+  let docHeader = "<h1>Document Color Variables</h1><p class='subline'>"+docName+"</p>"
+  let tableStart = "<table>"
+  let tableHeader = "<thead><tr><th>Name</th><th>Color</th></tr></thead>" 
+  let tableBodyStart = "<tbody>";
+  let tableBodyEnd = "</tbody>";
+  let tableEnd = "</table>"
+  let wrapperDivEnd = "</div>"
+
+  var tempOutputArray = new Array();
+
+
+  var output = htmlheader + wrapperDivStart + docHeader + tableStart + tableHeader + tableBodyStart;
+  getAllSwatches();
+  output += tableBodyEnd + tableEnd + wrapperDivEnd + htmlEnd;
+
+  
+  function getAllSwatches(){
+    documentSwatches.forEach(object => {
+      var objName = object.name;
+      var objColor = GF.hexAtoRgba(object.color);
+
+      var tempData = "<tr>"
+      tempData += createNiceHTMLName(objName)
+      tempData += niceColorHexAlpha(objColor)
+      tempData += "</tr>"
+
+
+      tempOutputArray.push({"name":objName, "data":tempData})        
+    })
+  
+     function compare(a, b) {
+        // Use toUpperCase() to ignore character casing
+        const bandA = a.name.toUpperCase();
+        const bandB = b.name.toUpperCase();
+
+        let comparison = 0;
+        if (bandA > bandB) {
+          comparison = 1;
+        } else if (bandA < bandB) {
+          comparison = -1;
+        }
+        return comparison;
+      }
+
+      
+      tempOutputArray.sort(compare)
+
+      tempOutputArray.forEach(data => {
+        output+=data.data;
+      })
+
+    }
+
+
+
+
+
+  saveToFile({
+    filenamePrefix: docName+"ColorVariables.html",
+    content: NSString.stringWithString(output)
+  });
+
 }
 
 
 
 export var exportLayerStyles = function(context) {
 
+
   var layerStyles = document.sharedLayerStyles;
   var textStyles = document.sharedTextStyles;
-  var documentSwatches = document.swatches;
 
   var docName = context.document.fileURL().lastPathComponent().split(".sketch")[0];
   let wrapperDivStart = "<div class='table-wrapper'>"
   let docHeader = "<h1>Document Textstyles</h1><p class='subline'>"+docName+"</p>"
   let tableStart = "<table>"
-  let tableHeader = "<thead><tr><th>Name</th><th>Used</th><th class='ffamily'>Family</th><th class='fWeight'>Weight</th><th>Size</th><th>Line</th><th>Color</th><th>Color Variable</th></tr></thead>" 
+  let tableHeader = "<thead><tr><th>Name</th><th>Used</th><th class='ffamily'>Family</th><th class='fWeight'>Weight</th><th>Size</th><th>Line</th><th class='colorWidth'>Color</th><th>Color Variable</th><th>Opacity</th></tr></thead>" 
   let tableBodyStart = "<tbody>";
   let tableBodyEnd = "</tbody>";
   let tableEnd = "</table>"
@@ -167,15 +205,15 @@ export var exportLayerStyles = function(context) {
   function getAllTextStyles(){
     textStyles.forEach(object => {
 
-      
-      
-      
       var objName = object.name;
       var objfamily = object.style.fontFamily;
       var objFontVariant = object.style.sketchObject.textStyle().fontPostscriptName().split("-")[1];
       var objLineheigt = object.style.lineHeight;
       var objFontSize = object.style.fontSize;
-      var objFontColor = object.style.textColor;
+      var objFontColor = GF.hexAtoRgba(object.style.textColor);
+      var objAlpha = Math.round(100* object.style.opacity)
+
+      var objFontColorAlpha = objFontColor.a
 
       var objUsed = "<td class='warning'>No</td>";
 
@@ -216,7 +254,7 @@ export var exportLayerStyles = function(context) {
        if (!referenceSwatch){
           colorVariable = "<td class='error'>Broken</td>"
        } else {
-          colorVariable = "<td>"+referenceSwatch.name+"</td>"
+          colorVariable = "<td class='smallText'>"+referenceSwatch.name+"</td>"
        }
       }
 
@@ -229,7 +267,7 @@ export var exportLayerStyles = function(context) {
 
       //var link = createLink(LAYERSHOWFUNCTION, object.id)
 
-      var tempArray = ["<tr><td>"+objName+"</td>",objUsed, objfamily,"<td>"+objFontVariant+"</td>","<td>"+objFontSize+" dp</td>","<td>"+objLineheigt+" dp</td>","<td>"+objFontColor+"</td>",colorVariable+"</tr>"]
+      var tempArray = ["<tr><td>"+objName+"</td>",objUsed, objfamily,"<td>"+objFontVariant+"</td>","<td>"+objFontSize+" dp</td>","<td>"+objLineheigt+" dp</td>",niceColorHexAlpha(objFontColor),colorVariable,"<td>"+objAlpha+"</td></tr>"]
       outputCSV += tempArray.join(" ");
 
     })
@@ -309,7 +347,7 @@ function doSomething(object) {
       if(!tempsharedStyle){
         objsharedStyleId = "<td class='error'>broken</td>"
       }else {
-        objsharedStyleId = "<td>"+document.getSharedTextStyleWithID(objsharedStyleId).name+"</td>"
+        objsharedStyleId = "<td class='smallText'>"+document.getSharedTextStyleWithID(objsharedStyleId).name+"</td>"
       }
     }
 
@@ -373,5 +411,5 @@ saveToFile({
 
 
 
-          };
+};
           

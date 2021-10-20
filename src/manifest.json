@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/sketch-hq/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
   "icon": "icon.png",
+  "identifier": "com.atomatic.designsystem-tools",
   "commands": [
     {
       "script" : "exportStyles.js",
@@ -12,16 +13,24 @@
     },
     {
       "script" : "exportStyles.js",
-      "name" : "Check Styles & Variables",
+      "name" : "Check Textstyles",
       "handlers" : {
         "run" : "exportLayerStyles"
       },
       "identifier" : "exportSketchLayerStyles"
     },
     {
+      "script" : "exportStyles.js",
+      "name" : "Check Color Variables",
+      "handlers" : {
+        "run" : "checkSwatches"
+      },
+      "identifier" : "checkColorSwatches"
+    },
+    {
       "name": "Message",
       "identifier": "element.show",
-      "script": "exportStyles.js",
+      "script": "linkComands.js",
       "handlers": {
         "actions": {
           "HandleURL": "setSelection"
@@ -33,7 +42,8 @@
     "title": "Designsystem-Tools",
     "items": [
       "exportTextstyles",
-      "exportSketchLayerStyles"
+      "exportSketchLayerStyles",
+      "checkColorSwatches"
     ]
   }
 }

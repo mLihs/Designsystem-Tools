@@ -1,14 +1,16 @@
 {
   "name": "designsystem-tools",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.1.7",
+  "license": "MIT",
   "engines": {
     "sketch": ">=49.0"
   },
   "skpm": {
-    "name": "Designsystem-Tools",
+    "name": "Designsystem Tools",
     "manifest": "src/manifest.json",
     "main": "designsystem-tools.sketchplugin",
+    "appcast": "https://raw.githubusercontent.com/mLihs/Designsystem-Tools/master/.appcast.xml",
     "assets": [
       "assets/**/*"
     ],
