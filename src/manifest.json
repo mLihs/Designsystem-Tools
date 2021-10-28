@@ -5,11 +5,20 @@
   "commands": [
     {
       "script" : "exportStyles.js",
-      "name" : "Check Textlayer",
+      "name" : "Check Typography",
       "handlers" : {
         "run" : "exportTextLayer"
       },
-      "identifier" : "exportTextstyles"
+      "identifier" : "check.textlayer"
+    },
+    {
+      "script" : "exportStyles.js",
+      "name" : "Check Design Language",
+      "shortcut": "cmd 1",
+      "handlers" : {
+        "run" : "exportSketchLayer"
+      },
+      "identifier" : "check.shapes"
     },
     {
       "script" : "exportStyles.js",
@@ -17,7 +26,7 @@
       "handlers" : {
         "run" : "exportLayerStyles"
       },
-      "identifier" : "exportSketchLayerStyles"
+      "identifier" : "check.textstyles"
     },
     {
       "script" : "exportStyles.js",
@@ -25,7 +34,15 @@
       "handlers" : {
         "run" : "checkSwatches"
       },
-      "identifier" : "checkColorSwatches"
+      "identifier" : "check.colorswatches"
+    },
+    {
+      "script" : "exportStyles.js",
+      "name" : "Check Symbol Pattern",
+      "handlers" : {
+        "run" : "checkSymbolPatern"
+      },
+      "identifier" : "check.symbolstucture"
     },
     {
       "name": "Message",
@@ -41,9 +58,11 @@
   "menu": {
     "title": "Designsystem-Tools",
     "items": [
-      "exportTextstyles",
-      "exportSketchLayerStyles",
-      "checkColorSwatches"
+      "check.textlayer",
+      "check.shapes",
+      "check.textstyles",
+      "check.colorswatches",
+      "check.symbolstucture"
     ]
   }
 }
