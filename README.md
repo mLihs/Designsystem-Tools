@@ -1,6 +1,6 @@
-<img src="https://github.com/mLihs/Designsystem-Tools/blob/master/assets/icon.svg" alt="Design System Tools" width="128">
 
-# DB Designsystem-Tools
+
+# Designsystem-Tools
 
 ## Installation
 
