@@ -5,7 +5,7 @@ import * as foundationColorsJson from './brandColors.js'
 
 var foundationColors = foundationColorsJson.colors;
 
-
+const FILETYPE = 'html';
 
 export function colorCheckBrandConformity (colorInput){
 
@@ -56,7 +56,7 @@ export function niceColorHexAlpha(color){
 export function saveToFile({ filenamePrefix, content: string, fileType }) {
   // Configuring save panel
   var savePanel = NSSavePanel.savePanel();
-  savePanel.allowedFileTypes = ["*"];
+  savePanel.allowedFileTypes = [FILETYPE];
   savePanel.nameFieldStringValue = `${filenamePrefix}`;
 
   // Launching alert

@@ -351,7 +351,7 @@ export var checkSymbolPatern = function(context) {
           count = 0;
           m=1;
           
-          if (name == "x"){
+          if (name == "x."){
             objNameChecktArray.push("<span class='error-type'>"+name+"</span>")
           } else {
             objNameChecktArray.push(name)
