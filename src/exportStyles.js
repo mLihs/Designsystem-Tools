@@ -225,7 +225,7 @@ function createNiceHTMLName(name){
 
 export var checkSwatches = function (context) {
 
-  var docName = context.document.fileURL().lastPathComponent().split(".sketch")[0];
+  var docName = GF.documentName(context);
 
   let docHeader = "<h1>Document Color Variables</h1><p class='subline'>"+docName+"</p>"
   let tableHeader = `<table>
@@ -296,7 +296,7 @@ var regExPattern = [/[0-9][.]/g, /[A-Z][.]/g, /[a-z][.]/g]
 
 export var checkSymbolPatern = function(context) {
 
-  var docName = context.document.fileURL().lastPathComponent().split(".sketch")[0];
+  var docName = GF.documentName(context);
 
   let docHeader = "<h1>Document Symbol Structure Test</h1><p class='subline'>"+docName+"</p>"
   let tableHeader = `<table>
@@ -406,7 +406,7 @@ export var checkSymbolPatern = function(context) {
 
 export var exportSketchLayer = function(context) {
 
-  var docName = context.document.fileURL().lastPathComponent().split(".sketch")[0];
+  var docName = GF.documentName(context);
 
 
   let docHeader = "<h1>Document Design Language</h1><p class='subline'>"+docName+"</p>"
@@ -679,7 +679,7 @@ export var exportLayerStyles = function(context) {
   var layerStyles = document.sharedLayerStyles;
   var textStyles = document.sharedTextStyles;
 
-  var docName = context.document.fileURL().lastPathComponent().split(".sketch")[0];
+  var docName = GF.documentName(context);
 
   let docHeader = "<h1>Document Textstyles</h1><p class='subline'>"+docName+"</p>"
   let tableHeader = `<table>
@@ -792,7 +792,7 @@ export var exportTextLayer = function(context) {
 
 
 
-  var docName = context.document.fileURL().lastPathComponent().split(".sketch")[0];
+  var docName = GF.documentName(context);
 
   let wrapperDivStart = "<div class='table-wrapper'>"
   let docHeader = "<h1>Document Textlayer Styles</h1><p class='subline'>"+docName+"</p>"

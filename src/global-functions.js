@@ -1,9 +1,13 @@
 
 
 import * as foundationColorsJson from './brandColors.js'
-
-
 var foundationColors = foundationColorsJson.colors;
+
+
+var sketch = require('sketch/dom');
+var document = sketch.getSelectedDocument()
+
+
 
 const FILETYPE = 'html';
 
@@ -48,6 +52,39 @@ export function niceColorHexAlpha(color){
     }
 
     return objFontColor;
+}
+
+
+
+
+export function writeToFile(path, content) {
+  const resultStr = NSString.stringWithFormat('%@', content)
+  resultStr.writeToFile_atomically(path, true)
+}
+
+
+export function getPluginFolderPath (context) {
+  // Get absolute folder path of plugin
+  let split = context.scriptPath.split('/');
+  split.splice(-3, 3);
+  return split.join('/');
+}
+
+
+
+
+export function documentName(context){
+
+  if (context.document.fileURL() == null) { 
+
+    return "unsaved_Doument";
+
+  } else {
+
+    return context.document.fileURL().path().replace(/\.sketch$/, '')
+  
+  }
+
 }
 
 
